@@ -58,13 +58,16 @@ if __name__ == "__main__":
     , "JER_EffectiveNP_1"
     ]
 
-  vars = [ dvars[k] for k in dvars ]
+  remove = [ "PDF" ]
+
+  vars = [ dvars[k] for k in dvars if all(r not in k for r in remove) ]
   statvars = [ dvars[k] for k in dvars if "stat" in k ]
   plotvars = [ dvars[k] for k in plotvarnames ]
   systvars = \
     [ dvars[k] for k in dvars
         if "stat" not in k
           and "singletop" not in k
+          and "JER" not in k
           and "PDF" not in k
           and "Light" not in k
     ]
@@ -132,23 +135,27 @@ if __name__ == "__main__":
     # , "JER effective NP 1"
     ]
 
+  stdcalibs = [ alluncerts , withstatuncerts , ]
+  stdlabels = [ "standard calib" , "standard calib stat" , "standard calib JER/stop" ]
+  nstd = len(stdcalibs)
+
   nextracurves = len(curves)-2
  
   compare \
     ( plt
-    , [ ( xs , xzeros ) ] * len(curves) + [ ( bincenters , binerrs ) ]
-    , curves + [ alluncerts ]
-    , curvelabels + [ "standard calib" ]
+    , [ ( xs , xzeros ) ] * len(curves) + [ ( bincenters , binerrs ) ] * nstd
+    , curves + stdcalibs
+    , curvelabels + stdlabels
     , "jet $p_\\mathrm{T}$ [GeV]"
     , "efficiency scale factor"
-    , alphas = [0.5] + [ 1.0 ] * len(curves)
-    , errorfills = [ True ] * len(curves) + [ False ]
-    , markers = [ None ] * len(curves) + [ "s" ]
-    , linewidths = [ 2 , 0 ] + [ 2 ] * nextracurves + [ 0 ]
+    , alphas = [0.5] + [ 1.0 ] * 2 + [ 0.75 ] * (nstd - 1)
+    , errorfills = [ True ] * len(curves) + [ False ] * nstd
+    , markers = [ None ] * len(curves) + [ "" ] * nstd
+    , linewidths = [ 2 , 0 ] + [ 2 ] * nstd
     , colors= \
         [ "red" ] * 2
-      + [ "blue" , "green" , "gray" , "magenta" , "orange" ][:nextracurves]
-      + [ "black" ]
+      + [ "blue" , "green" , "magenta" , "orange" ][:nextracurves]
+      + [ "black" , "gray" ][:nstd]
     )
 
   plt.set_xscale("log")

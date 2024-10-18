@@ -86,10 +86,7 @@ if __name__ == "__main__":
     , errorfills = [ True ] * (len(fracuncerts) + 1)
     , markers = [ None ] * (len(fracuncerts) + 1)
     , linewidths = [ 2 ] * (len(fracuncerts) + 1)
-    # , colors= \
-    #     [ "red" ] * 2
-    #   + [ "blue" , "green" , "gray" , "magenta" , "orange" ][:nextracurves]
-    #   + [ "black" ]
+    , colors= ["black", "blue" , "green" , "gray" , "magenta" , "orange" ]
     )
 
   plt.plot([0, 1000], [1, 1], lw=1, color="black", ls="--")
